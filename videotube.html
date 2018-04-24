@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>VideoTube</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="jquery-3.3.1.min.js"></script>
+	<style>
+		span {
+			display: block;
+		}
+		#search {
+			margin: 1rem;
+		}
+		.card {
+			background-color: #bbb;
+			margin: 1rem;
+			padding: 0.5rem;
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<h1>VideoTube</h1>
+	</header>
+	<main class="row">
+		<div id="left" class="col-sm-4">
+			<input id="search" type="search">
+		</div>
+		<div id="right" class="col-sm-8">
+			<!-- <video src="https://storage.googleapis.com/webfundamentals-assets/videos/chrome.webm" controls>
+				Your browser does not support the video tag.
+			</video> -->
+		</div>
+	</main>
+
+	<script>
+		var video = $('#right');
+		var list = $('#left');
+		$.getJSON( "videosDetails.json", function(json) {
+			function callback(a) {
+				return function playVid() {
+					video.empty();
+					$('<h2>', {
+						text: json[a].title
+					}).appendTo(video);
+					$('<video>', {
+						src: json[a].src,
+						controls: true,
+						autoplay: true,
+						text: 'Your browser does not support the video tag.'
+					}).appendTo(video);
+					$('<h4>', {
+						text: "Comment:"
+					}).appendTo(video);
+					$('<span>', {
+						text: json[a].comment
+					}).appendTo(video);
+				}
+			}
+			$(document).ready(callback(0));
+			for (var i = 0; i < json.length; i++) {
+				$('<div>', {
+					id: 'video' + i,
+					class: 'card',
+					click: callback(i)
+				}).appendTo(list);
+				$('<h3>', {
+					text: json[i].title
+				}).appendTo('#video' + i);
+			}
+		});
+
+
+	</script>
+	
+</body>
+</html>
